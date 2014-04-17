@@ -1,0 +1,48 @@
+{
+  "name": "generator-nmg",
+  "version": "0.0.1",
+  "description": "Yeoman generator for nmg-workflow",
+  "license": "MIT",
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xiaoyaojones/generator-nmg"
+  },
+  "homepage": "https://github.com/xiaoyaojones/generator-nmg",
+  "bugs": {
+    "url": "https://github.com/xiaoyaojones/generator-nmg/issues"
+  },
+  "author": {
+    "name": "xiaoyaojones",
+    "email": "xiaoyaojones@gmail.com",
+    "url": "https://github.com/xiaoyaojones/"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "workflow",
+    "grunt",
+    "nmg",
+    "yeoman-generator",
+    "retina",
+    "sprite"
+  ],
+  "dependencies": {
+    "yeoman-generator": "~0.16.0",
+    "chalk": "~0.4.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "readme": "generator-nmg",
+  "readmeFilename": "README.md",
+  "_id": "generator-nmg@0.0.1",
+  "_from": "generator-nmg@"
+}
