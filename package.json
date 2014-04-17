@@ -41,8 +41,7 @@
   "devDependencies": {
     "mocha": "*"
   },
-  "readme": "generator-nmg",
-  "readmeFilename": "README.md",
-  "_id": "generator-nmg@0.0.1",
-  "_from": "generator-nmg@"
+  "peerDependencies": {
+    "yo": ">=1.0.0"
+  }
 }
