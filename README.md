@@ -1,4 +1,5 @@
-generator-nmg
-=============
+# generator-nmg
 
-Yeoman generator for NMG-workflow
+## License
+
+[MIT](http://rem.mit-license.org/)
