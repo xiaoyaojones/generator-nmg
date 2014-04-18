@@ -3,15 +3,10 @@
   "version": "<%= version %>",
   "dependencies": {<%
     var depn = [];
-    if (includeJquery) {
-      depn.push('\n    "jquery": "*"');
+    if (includeSeajs) {
+      depn.push('\n    "seajs": "*"');
     }
-    if (includeJquerymobile) {
-      depn.push('\n    "jquery-mobile": "*"');
-    }
-    if (includeBootstrap) {
-      depn.push('\n    "bootstrap": "*"');
-    }
+
     print(depn.join(','));
   %>
   }

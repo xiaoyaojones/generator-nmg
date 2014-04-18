@@ -18,6 +18,14 @@ var F2eGenerator = yeoman.generators.Base.extend({
     askFor: function () {
         var done = this.async();
 
+        this.lib = {
+            jQ1 : '1.11.0',
+            jQ2 : '2.1.0',
+            seajs : '2.2.0'
+        };
+
+        var _this = this;
+
         // have Yeoman greet the user
         this.log(this.yeoman);
 
@@ -48,7 +56,7 @@ var F2eGenerator = yeoman.generators.Base.extend({
                     {
                         name: 'grunt-sprite (Sprite slice images)',
                         value: 'includeSprite',
-                        checked: true
+                        checked: false
                     },
                     {
                         name: 'grunt-pngmin (Optimize PNGs)',
@@ -66,25 +74,19 @@ var F2eGenerator = yeoman.generators.Base.extend({
                         checked: false
                     },
                     {
-                        name: 'JS: jQuery  (Newest version)',
-                        value: 'includeJquery',
-                        checked: false
-                    },
-                    {
-                        name: 'JS: seajs  (Newest version)',
+                        name: 'JS: seajs  (' + _this.lib.seajs + ')',
                         value: 'includeSeajs',
                         checked: false
-                    },
-                    {
-                        name: 'JS: jQuery Mobile  (Newest version)',
-                        value: 'includeJquerymobile',
-                        checked: false
-                    },
-                    {
-                        name: 'JS: Bootstrap  (Newest version)',
-                        value: 'includeBootstrap',
-                        checked: false
                     }
+                ]
+            },
+            {
+                type: 'list',
+                name: 'jQLib',
+                message: 'Which jQuery library would you like?',
+                choices:[
+                    'jQuery ' + _this.lib.jQ1,
+                    'jQuery ' + _this.lib.jQ2,
                 ]
             }
         ];
@@ -94,7 +96,7 @@ var F2eGenerator = yeoman.generators.Base.extend({
                 if (props.hasOwnProperty(prop)) {
                     this[prop] = props[prop];
                 }
-            }
+            };
 
             var features = props.features;
 
@@ -108,11 +110,8 @@ var F2eGenerator = yeoman.generators.Base.extend({
             this.includeTimer = hasFeature('includeTimer');
             this.include2x2x = hasFeature('include2x2x');
 
-            // include js
-            this.includeJquery = hasFeature('includeJquery');
+            // include seajs
             this.includeSeajs = hasFeature('includeSeajs');
-            this.includeJquerymobile = hasFeature('includeJquerymobile');
-            this.includeBootstrap = hasFeature('includeBootstrap');
 
             done();
         }.bind(this));
