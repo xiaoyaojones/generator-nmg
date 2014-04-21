@@ -1,12 +1,10 @@
-/*
-**config.js
-**作用：設置seajs的config
-**主要技術：seajs
-**衝突：暫無發現
-**path：source-開發、dist-發布
-**未解決bug：暫無發現
-**@Jones Ho
-*/
+/**
+ * @name: config.js
+ * @description: 設置seajs的config
+ * @path: source-開發、dist-發布
+ * @author: Jones Ho
+ */
+
 seajs.config({
 	alias: {
 		//插件別名

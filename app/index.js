@@ -4,7 +4,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
-var F2eGenerator = yeoman.generators.Base.extend({
+var NmgGenerator = yeoman.generators.Base.extend({
     init: function () {
         this.pkg = require('../package.json');
 
@@ -112,14 +112,15 @@ var F2eGenerator = yeoman.generators.Base.extend({
     },
 
     app: function () {
-        this.directory('bower_components','bower_components');
-        this.directory('html', 'html');
-        this.directory('source', 'source');
-
+        
         this.copy('Seaconfig.js', 'Seaconfig.js');
         this.copy('Gruntfile.js', 'Gruntfile.js');
         this.copy('_package.json', 'package.json');
         this.copy('_bower.json', 'bower.json');
+
+        this.directory('html', 'html');
+        this.directory('source', 'source');
+        this.directory('lib','lib');
     },
 
     projectfiles: function () {
@@ -128,4 +129,4 @@ var F2eGenerator = yeoman.generators.Base.extend({
     }
 });
 
-module.exports = F2eGenerator;
+module.exports = NmgGenerator;

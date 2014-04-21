@@ -1,5 +1,5 @@
 /**
- * Sea.js 2.3.0 | seajs.org/LICENSE.md
+ * Sea.js 2.2.1 | seajs.org/LICENSE.md
  */
 (function(global, undefined) {
 
@@ -10,7 +10,7 @@ if (global.seajs) {
 
 var seajs = global.seajs = {
   // The current version of Sea.js being used
-  version: "2.3.0"
+  version: "2.2.1"
 }
 
 var data = seajs.data = {}
@@ -86,9 +86,9 @@ var emit = seajs.emit = function(name, data) {
     // Copy callback lists to prevent modification
     list = list.slice()
 
-    // Execute event callbacks, use index because it's the faster.
-    for(var i = 0, len = list.length; i < len; i++) {
-      list[i](data)
+    // Execute event callbacks
+    while ((fn = list.shift())) {
+      fn(data)
     }
   }
 
@@ -250,7 +250,7 @@ function id2Uri(id, refUri) {
 
 
 var doc = document
-var cwd = dirname(location.href)
+var cwd = dirname(doc.URL)
 var scripts = doc.scripts
 
 // Recommend to add `seajsnode` id for the `sea.js` script element
@@ -280,11 +280,22 @@ seajs.resolve = id2Uri
 var head = doc.head || doc.getElementsByTagName("head")[0] || doc.documentElement
 var baseElement = head.getElementsByTagName("base")[0]
 
+var IS_CSS_RE = /\.css(?:\?|$)/i
 var currentlyAddingScript
 var interactiveScript
 
+// `onload` event is not supported in WebKit < 535.23 and Firefox < 9.0
+// ref:
+//  - https://bugs.webkit.org/show_activity.cgi?id=38995
+//  - https://bugzilla.mozilla.org/show_bug.cgi?id=185236
+//  - https://developer.mozilla.org/en/HTML/Element/link#Stylesheet_load_events
+var isOldWebKit = +navigator.userAgent
+    .replace(/.*(?:AppleWebKit|AndroidWebKit)\/(\d+).*/, "$1") < 536
+
+
 function request(url, callback, charset) {
-  var node = doc.createElement("script")
+  var isCSS = IS_CSS_RE.test(url)
+  var node = doc.createElement(isCSS ? "link" : "script")
 
   if (charset) {
     var cs = isFunction(charset) ? charset(url) : charset
@@ -293,10 +304,16 @@ function request(url, callback, charset) {
     }
   }
 
-  addOnload(node, callback, url)
+  addOnload(node, callback, isCSS, url)
 
-  node.async = true
-  node.src = url
+  if (isCSS) {
+    node.rel = "stylesheet"
+    node.href = url
+  }
+  else {
+    node.async = true
+    node.src = url
+  }
 
   // For some cache cases in IE 6-8, the script executes IMMEDIATELY after
   // the end of the insert execution, so use `currentlyAddingScript` to
@@ -311,8 +328,16 @@ function request(url, callback, charset) {
   currentlyAddingScript = null
 }
 
-function addOnload(node, callback, url) {
+function addOnload(node, callback, isCSS, url) {
   var supportOnload = "onload" in node
+
+  // for Old WebKit and Old Firefox
+  if (isCSS && (isOldWebKit || !supportOnload)) {
+    setTimeout(function() {
+      pollCss(node, callback)
+    }, 1) // Begin after node insertion
+    return
+  }
 
   if (supportOnload) {
     node.onload = onload
@@ -334,7 +359,7 @@ function addOnload(node, callback, url) {
     node.onload = node.onerror = node.onreadystatechange = null
 
     // Remove the script to reduce memory leak
-    if (!data.debug) {
+    if (!isCSS && !data.debug) {
       head.removeChild(node)
     }
 
@@ -343,6 +368,43 @@ function addOnload(node, callback, url) {
 
     callback()
   }
+}
+
+function pollCss(node, callback) {
+  var sheet = node.sheet
+  var isLoaded
+
+  // for WebKit < 536
+  if (isOldWebKit) {
+    if (sheet) {
+      isLoaded = true
+    }
+  }
+  // for Firefox < 9.0
+  else if (sheet) {
+    try {
+      if (sheet.cssRules) {
+        isLoaded = true
+      }
+    } catch (ex) {
+      // The value of `ex.name` is changed from "NS_ERROR_DOM_SECURITY_ERR"
+      // to "SecurityError" since Firefox 13.0. But Firefox is less than 9.0
+      // in here, So it is ok to just rely on "NS_ERROR_DOM_SECURITY_ERR"
+      if (ex.name === "NS_ERROR_DOM_SECURITY_ERR") {
+        isLoaded = true
+      }
+    }
+  }
+
+  setTimeout(function() {
+    if (isLoaded) {
+      // Place callback here to give time for style rendering
+      callback()
+    }
+    else {
+      pollCss(node, callback)
+    }
+  }, 20)
 }
 
 function getCurrentScript() {
@@ -722,8 +784,6 @@ Module.save = function(uri, meta) {
     mod.dependencies = meta.deps || []
     mod.factory = meta.factory
     mod.status = STATUS.SAVED
-
-    emit("save", mod)
   }
 }
 
@@ -754,11 +814,32 @@ Module.use = function (ids, callback, uri) {
   mod.load()
 }
 
+// Load preload modules before all other modules
+Module.preload = function(callback) {
+  var preloadMods = data.preload
+  var len = preloadMods.length
+
+  if (len) {
+    Module.use(preloadMods, function() {
+      // Remove the loaded preload modules
+      preloadMods.splice(0, len)
+
+      // Allow preload modules to add new preload modules
+      Module.preload(callback)
+    }, data.cwd + "_preload_" + cid())
+  }
+  else {
+    callback()
+  }
+}
+
 
 // Public API
 
 seajs.use = function(ids, callback) {
-  Module.use(ids, callback, data.cwd + "_use_" + cid())
+  Module.preload(function() {
+    Module.use(ids, callback, data.cwd + "_use_" + cid())
+  })
   return seajs
 }
 
@@ -786,8 +867,12 @@ seajs.require = function(id) {
  * config.js - The configuration for the loader
  */
 
+var BASE_RE = /^(.+?\/)(\?\?)?(seajs\/)+/
+
 // The root path to use for id2uri parsing
-data.base = loaderDir
+// If loaderUri is `http://test.com/libs/seajs/[??][seajs/1.2.3/]sea.js`, the
+// baseUri should be `http://test.com/libs/`
+data.base = (loaderDir.match(BASE_RE) || ["", loaderDir])[1]
 
 // The loader directory
 data.dir = loaderDir
@@ -797,6 +882,25 @@ data.cwd = cwd
 
 // The charset for requesting files
 data.charset = "utf-8"
+
+// Modules that are needed to load before all other modules
+data.preload = (function() {
+  var plugins = []
+
+  // Convert `seajs-xxx` to `seajs-xxx=1`
+  // NOTE: use `seajs-xxx=1` flag in uri or cookie to preload `seajs-xxx`
+  var str = location.search.replace(/(seajs-\w+)(&|$)/g, "$1=1$2")
+
+  // Add cookie string
+  str += " " + doc.cookie
+
+  // Exclude seajs-xxx=0
+  str.replace(/(seajs-\w+)=1/g, function(m, name) {
+    plugins.push(name)
+  })
+
+  return plugins
+})()
 
 // data.alias - An object containing shorthands of module id
 // data.paths - An object containing path shorthands in module id
@@ -817,7 +921,7 @@ seajs.config = function(configData) {
       }
     }
     else {
-      // Concat array config such as map
+      // Concat array config such as map, preload
       if (isArray(prev)) {
         curr = prev.concat(curr)
       }

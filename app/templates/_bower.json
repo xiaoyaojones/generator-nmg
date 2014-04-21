@@ -6,6 +6,5 @@
     depn.push('\n    "jquery": "' + jQLib + '"');
     print(depn.join(','));
   %>
-  },
-  "directory": "lib"
+  }
 }
