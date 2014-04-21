@@ -20,8 +20,7 @@ var F2eGenerator = yeoman.generators.Base.extend({
 
         this.lib = {
             jQ1 : '1.11.0',
-            jQ2 : '2.1.0',
-            seajs : '2.2.0'
+            jQ2 : '2.1.0'
         };
 
         var _this = this;
@@ -46,7 +45,7 @@ var F2eGenerator = yeoman.generators.Base.extend({
             {
                 name: 'authorName',
                 message: 'Author Name',
-                default: ''
+                default: 'Jones Ho'
             },
             {
                 type: 'checkbox',
@@ -66,16 +65,11 @@ var F2eGenerator = yeoman.generators.Base.extend({
                     {
                         name: 'grunt-timer (Count Task Run Time)',
                         value: 'includeTimer',
-                        checked: true
+                        checked: false
                     },
                     {
                         name: 'grunt-2x2x (Generate images from @2x -> @1x)',
                         value: 'include2x2x',
-                        checked: false
-                    },
-                    {
-                        name: 'JS: seajs  (' + _this.lib.seajs + ')',
-                        value: 'includeSeajs',
                         checked: false
                     }
                 ]
@@ -85,8 +79,8 @@ var F2eGenerator = yeoman.generators.Base.extend({
                 name: 'jQLib',
                 message: 'Which jQuery library would you like?',
                 choices:[
-                    'jQuery ' + _this.lib.jQ1,
-                    'jQuery ' + _this.lib.jQ2,
+                    'jQuery ' + _this.lib.jQ1 + ' (for website)',
+                    'jQuery ' + _this.lib.jQ2 + ' (for wap)',
                 ]
             }
         ];
@@ -110,20 +104,19 @@ var F2eGenerator = yeoman.generators.Base.extend({
             this.includeTimer = hasFeature('includeTimer');
             this.include2x2x = hasFeature('include2x2x');
 
-            // include seajs
-            this.includeSeajs = hasFeature('includeSeajs');
+            // include jquery version
+            this.jQLib = this.jQLib.split(' ')[1];
 
             done();
         }.bind(this));
     },
 
     app: function () {
+        this.directory('bower_components','bower_components');
         this.directory('html', 'html');
-        this.directory('css', 'css');
-        this.directory('img', 'img');
-        this.directory('js', 'js');
-        this.directory('slice', 'slice');
+        this.directory('source', 'source');
 
+        this.copy('Seaconfig.js', 'Seaconfig.js');
         this.copy('Gruntfile.js', 'Gruntfile.js');
         this.copy('_package.json', 'package.json');
         this.copy('_bower.json', 'bower.json');

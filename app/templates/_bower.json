@@ -3,11 +3,9 @@
   "version": "<%= version %>",
   "dependencies": {<%
     var depn = [];
-    if (includeSeajs) {
-      depn.push('\n    "seajs": "*"');
-    }
-
+    depn.push('\n    "jquery": "' + jQLib + '"');
     print(depn.join(','));
   %>
-  }
+  },
+  "directory": "lib"
 }
