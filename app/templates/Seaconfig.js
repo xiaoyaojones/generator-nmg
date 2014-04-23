@@ -1,7 +1,7 @@
 /**
  * @name: config.js
  * @description: 設置seajs的config
- * @path: source-開發、dist-發布
+ * @path: source-源碼、dist-發佈
  * @author: Jones Ho
  */
 

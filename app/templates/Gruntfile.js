@@ -1,5 +1,5 @@
 /**
- * NMG-workflow v0.0.3
+ * NMG-workflow v0.0.7
  * https://github.com/xiaoyaojones/generator-nmg
  * @xiaoyaojones <xiaoyaojones@gmail.com>
  */
@@ -29,25 +29,25 @@ module.exports = function(grunt) {
                     ext: '.css' // 導出的 CSS 後綴名
                 }],
                 options: {
-                    yuicompress: false // 开启 YUI CSS 压缩 (http://yui.github.io/yuicompressor/)
+                    yuicompress: false // 開啟 YUI CSS 壓縮 (http://yui.github.io/yuicompressor/)
                 }
             },
-            // less 分支 -> 发布向
+            // less 分支 -> 發佈向
             release: {
                 files: [{
-                    expand: true, //启用动态扩展
-                    cwd: 'source/css/', // CSS 文件源的文件夹
-                    src: ['*.less', '!import*.less'], // 匹配规则
-                    dest: 'dist/css/', //导出 CSS 和雪碧图的路径地址
-                    ext: '.css' // 导出的 CSS名
+                    expand: true, //啟用動態擴展
+                    cwd: 'source/css/', // CSS 文件源的文件夾
+                    src: ['*.less', '!import*.less'], // 匹配規則
+                    dest: 'dist/css/', //導出 CSS 和雪碧圖的路徑地址
+                    ext: '.css' // 導出的 CSS名
                 }],
                 options: {
-                    yuicompress: true // 开启 YUI CSS 压缩 (http://yui.github.io/yuicompressor/)
+                    yuicompress: true // 開啟 YUI CSS 壓縮 (http://yui.github.io/yuicompressor/)
                 }
             }
         },
 
-        // CSS 验证检查 (https://github.com/gruntjs/grunt-contrib-csslint)
+        // CSS 驗證檢查 (https://github.com/gruntjs/grunt-contrib-csslint)
         csslint: {
             options: {
                 formatters: [{
@@ -72,56 +72,54 @@ module.exports = function(grunt) {
             }
         },
 
-        // CSS 压缩 (https://github.com/gruntjs/grunt-contrib-cssmin)
+        // CSS 壓縮 (https://github.com/gruntjs/grunt-contrib-cssmin)
         cssmin: {
             min: {
                 files: [{
                     expand: true,
-                    cwd: 'tmp/css',
+                    cwd: 'dev/css',
                     src: ['*.sprite.css'],
-                    dest: 'tmp/css',
+                    dest: 'dev/css',
                     ext: '.css'
                 }]
             }
         },
 
-        // 自动合并生成雪碧图
+        // 自動合併生成雪碧圖
         sprite: {
-            sprite: {
-                options: {
-                    // sprite背景图源文件夹，只有匹配此路径才会处理，默认 images/slice/
-                    imagepath: 'tmp/slice/',
-                    // 雪碧图输出目录，注意，会覆盖之前文件！默认 images/
-                    spritedest: 'dev/slice/',
-                    // 替换后的背景路径，默认 ../images/
-                    spritepath: 'images/',
-                    // 各图片间间距，如果设置为奇数，会强制+1以保证生成的2x图片为偶数宽高，默认 0
-                    padding: 2,
-                    // 是否以时间戳为文件名生成新的雪碧图文件，如果启用请注意清理之前生成的文件，默认不生成新文件
-                    newsprite: false,
-                    // 给雪碧图追加时间戳，默认不追加
-                    spritestamp: false,
-                    // 在CSS文件末尾追加时间戳，默认不追加
-                    cssstamp: false,
-                    // 默认使用二叉树最优排列算法
-                    algorithm: 'binary-tree',
-                    // 默认使用`pngsmith`图像处理引擎
-                    engine: 'pngsmith'
-                },
-                autoSprite: {
-                    files: [{
-                        //启用动态扩展
-                        expand: true,
-                        // css文件源的文件夹
-                        cwd: 'tem/css/',
-                        // 匹配规则
-                        src: '*.css',
-                        //导出css和sprite的路径地址
-                        dest: 'dev/css/',
-                        // 导出的css名
-                        ext: '.sprite.css'
-                    }]
-                }
+            options: {
+                // sprite背景圖源文件夾，只有匹配此路徑才會處理，默認images/slice/
+                imagepath: 'tmp/slice/',
+                // 雪碧圖輸出目錄，注意，會覆蓋之前文件！默認 images/
+                spritedest: 'dev/slice/',
+                // 替換後的背景路徑，默認 ../images/
+                spritepath: 'images/',
+                // 各圖片間間距，如果設置為奇數，會強制+1以保證生成的2x圖片為偶數寬高，默認 0
+                padding: 2,
+                // 是否以時間戳為文件名生成新的雪碧圖文件，如果啟用請注意清理之前生成的文件，默認不生成新文件
+                newsprite: false,
+                // 給雪碧圖追加時間戳，默認不追加
+                spritestamp: false,
+                // 在CSS文件末尾追加時間戳，默認不追加
+                cssstamp: false,
+                // 默認使用二叉樹最優排列算法
+                algorithm: 'binary-tree',
+                // 默認使用`pngsmith`圖像處理引擎
+                engine: 'pngsmith'
+            },
+            autoSprite: {
+                files: [{
+                    //啟用動態擴展
+                    expand: true,
+                    // css文件源的文件夾
+                    cwd: 'tmp/slice/',
+                    // 匹配規則
+                    src: '*.css',
+                    // 導出css和sprite的路徑地址
+                    dest: 'dev/css/',
+                    // 導出的css名
+                    ext: '.sprite.css'
+                }]
             }
         },
 
@@ -158,13 +156,13 @@ module.exports = function(grunt) {
             }
         },
 
-        // PNG 压缩 (更多配置说明：https://www.npmjs.org/package/grunt-pngmin)
+        // PNG 壓縮(更多配置說明：https://www.npmjs.org/package/grunt-pngmin)
         pngmin: {
             compile: {
                 options: {
-                    ext: '.png', // 后缀名
-                    force: true, // 生成优化后的图片覆盖原始图片
-                    iebug: false // 为 IE6 优化图片，如需要可设置`true`
+                    ext: '.png', // 後綴名
+                    force: true, // 生成優化後的圖片覆蓋原始圖片
+                    iebug: false // 為 IE6 優化圖片，如需要可設置`true`
                 },
                 files: [{
                     src: ['dev/sprite/*.png'],
@@ -179,7 +177,7 @@ module.exports = function(grunt) {
             }
         },
 
-        // 复制文件夹操作
+        // 複製文件夾操作
         copy: {
 
             //copy bower_components/jquery -> lib/jquery 開發/發佈向
@@ -192,7 +190,7 @@ module.exports = function(grunt) {
                 }]
             },
 
-            // 移动 slice/ 到 tmp/ 供下一步的 合并雪碧图 task 使用
+            // 移動slice/ 到tmp/ 供下一步的合併雪碧圖task 使用
             slice: {
                 files: [{
                     expand: true,
@@ -202,7 +200,7 @@ module.exports = function(grunt) {
                 }, ]
             },
 
-            // copy 分支 -> 开发向
+            // copy 分支 -> 開發向
             dev: {
                 files: [{
                     expand: true,
@@ -222,27 +220,27 @@ module.exports = function(grunt) {
                 }, ]
             },
 
-            // copy 分支 -> 发布向
+            // copy 分支 -> 發佈向
             release: {
                 files: [{
                     expand: true,
-                    cwd: 'tmp/css/',
+                    cwd: 'dev/css/',
                     src: ['*.css', '!*.timestamp.css', '!*.sprite.css', '!*.min.css'],
                     dest: 'dist/css/'
                 }, {
                     expand: true,
-                    cwd: 'source/images/',
+                    cwd: 'dev/images/',
                     src: ['**'],
                     dest: 'dist/images/'
                 }, {
                     expand: true,
-                    cwd: 'tmp/slice/',
+                    cwd: 'dev/slice/',
                     src: ['**'],
                     dest: 'dist/slice/'
                 }]
             },
 
-            // copy 分支 -> 调试向
+            // copy 分支 -> 調試向
             debug: {
                 files: [{
                     expand: true,
@@ -263,35 +261,36 @@ module.exports = function(grunt) {
             }
         },
 
-        // 检测 文件/代码 变动事件
+        // 檢測 文件/代碼 變動事件
         watch: {
-            files: 'css/*.less',
+            files: 'source/css/*.less',
             tasks: ['less:dev', 'copy:dev', 'clean:dev']
         },
 
 
-        // 自动生成 @2x 图片对应的 @1x 图 (已存在图片不再生成，仅缺失图片触发此操作) 
+        // 自動生成@2x 圖片對應的@1x 圖(已存在圖片不再生成，僅缺失圖片觸發此操作)
         _2x2x: {
             scale: {
-                imgsrcdir: "source/slice", // 源目录，此目录中的 @2x -> @1x
-                imgdesdir: "source/slice", // 目标目录
+                imgsrcdir: "source/slice", // 源目錄，此目錄中的 @2x -> @1x
+                imgdesdir: "source/slice", // 目標目錄
+                quality: 100,
                 option: {
-                    'overwrite': true // 是否覆盖原图
+                    'overwrite': true // 是否覆蓋原圖
                 }
             }
         },
 
-        // 清理临时目录
+        // 清理臨時目錄
         clean: {
-            // clean 开发向
+            // clean 開發向
             dev: ['tmp/', 'dev/slice/', 'dist/'],
-            // clean 发布向
+            // clean 發佈向
             release: ['tmp/', 'dev/', 'dist/'],
-            // clean 调试向
+            // clean 調試向
             debug: ['tmp/', 'dev/slice/']
         },
 
-        // 文件夹打包压缩 Zip
+        // 文件夾打包壓縮 Zip
         compress: {
             main: {
                 options: {
@@ -301,13 +300,13 @@ module.exports = function(grunt) {
                         expand: true,
                         src: "**/*",
                         cwd: "dist/"
-                    } // 设置压缩范围为整个 `dist/` 发布目录
+                    } // 設置壓縮範圍為整個 `dist/` 發布目錄
                 ]
             }
         }
     });
 
-    // 加载官方插件
+    // 加載官方插件
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -316,48 +315,63 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-compress');
 
-    // 加载其他插件
-    //grunt.loadNpmTasks('grunt-css-sprite');
-    grunt.loadNpmTasks('grunt-pngmin');
-    grunt.loadNpmTasks('grunt-timestamp');
-    //grunt.loadNpmTasks('grunt-2x2x');
 
+    //檢查是否存在外部插件
+    var bIsSelected = {
+        'grunt_css_sprite': grunt.file.exists('node_modules/grunt-css-sprite/Gruntfile.js'),
+        'grunt_pngmin': grunt.file.exists('node_modules/grunt-pngmin/Gruntfile.js'),
+        'grunt_timestamp': grunt.file.exists('node_modules/grunt-timestamp/Gruntfile.js'),
+        'grunt_2x2x': grunt.file.exists('node_modules/grunt-2x2x/Gruntfile.js'),
+    };
 
-    /* 任务注册开始 */
+    // 加载外部插件
+    if ( !! bIsSelected.grunt_css_sprite) {
+        grunt.loadNpmTasks('grunt-css-sprite')
+    };
+    if ( !! bIsSelected.grunt_pngmin) {
+        grunt.loadNpmTasks('grunt-pngmin')
+    };
+    if ( !! bIsSelected.grunt_timestamp) {
+        grunt.loadNpmTasks('grunt-timestamp')
+    };
+    if ( !! bIsSelected.grunt_2x2x) {
+        grunt.loadNpmTasks('grunt-2x2x')
+    };
 
-    // == 默认工作流 ==
-    // 输出目录为：../publish/(css/ + images/ + slice/)
-    // 注：仅做编译操作 Less -> CSS，无其他操作
+    /* 任務註冊開始 */
+
+    // == 默認工作流 ==
+    // 輸出目錄為：../dist/(css/ + images/ + slice/)
+    // 注：僅做編譯操作Less -> CSS，無其他操作
     grunt.registerTask('default', ['less:dev', 'copy:dev', 'clean:dev', 'watch']);
 
-    // == 完整发布流 ==
-    // 输出目录为：../publish/(css/ + images/ + sprite/)
-    // 注：包括 Less 编译+压缩+雪碧图拼合+PNG压缩，仅执行1次流，不含(文件变动 watch)
+    // == 完整發佈流 ==
+    // 輸出目錄為：../dist/(css/ + images/ + sprite/)
+    // 注：包括Less 編譯+壓縮+雪碧圖拼合+PNG壓縮，僅執行1次流，不含(文件變動watch)
     grunt.registerTask('all', ['less:release', 'sprite-cssmin', 'timestamp', 'copy:release', 'pngmin']);
 
-    // == 调试工作流 ==
-    // 输出目录为：../dev/(css/ + images/ + sprite/)
-    // 注：同 `grunt all`，但不删除 tmp/ 目录，供调试查看使用，含(文件变动 watch)
+    // == 調試工作流 ==
+    // 輸出目錄為：../dev/(css/ + images/ + sprite/)
+    // 注：同`grunt all`，但不刪除tmp/ 目錄，供調試查看使用，含(文件變動watch)
     grunt.registerTask('debug', ['clean:release', 'less:release', 'sprite-cssmin', 'copy:debug', 'watch']);
 
-    // == FTP 发布操作 ==
-    // 注：将 `grunt all` 生成结果使用 FTP 上传到服务端
-    grunt.registerTask('push', ['all', 'ftp-deploy:push', 'clean:release']);
-
-    // == ZIP 发布操作 ==
-    // 注：将 `grunt all` 生成结果使用 ZIP 生成包文件
+    // == ZIP 發布操作 ==
+    // 注：將`grunt all` 生成結果使用ZIP 生成包文件
     grunt.registerTask('zip', ['all', 'compress', 'clean:release']);
 
-    // 定义别名 `grunt sprite-cssmin`
-    // 注：拷贝移动 slice -> 合并雪碧图 sprite -> CSS 压缩
+    // 定義別名 `grunt 2x2x`
+    // 注：@2x 圖 生成 @1x 圖
+    grunt.registerTask('2x2x', ['_2x2x:scale']);
+
+    // 定義別名 `grunt sprite-cssmin`
+    // 注：拷貝移動slice -> 合併雪碧圖sprite -> CSS 壓縮
     grunt.registerTask('sprite-cssmin', ['copy:slice', 'sprite', 'cssmin']);
 
     // for test build
     grunt.registerTask('test', ['less:dev', 'copy:dev', 'clean:dev']);
 
-    // 定义别名 `grunt 2x2x`
-    // 注：@2x 图 生成 @1x 图
-    grunt.registerTask('2x2x', ['_2x2x']);
+    // 定義別名 `grunt jquery`
+    // 注：初始移動jquery到根目錄以供全站使用
+    grunt.registerTask('jquery', ['copy:jquery']);
 
-    grunt.registerTask('jquery',['copy:jquery']);
 }
