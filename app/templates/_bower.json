@@ -1,10 +1,7 @@
 {
-  "name": "<%= _.slugify(projectName) %>",
-  "version": "<%= version %>",
-  "dependencies": {<%
-    var depn = [];
-    depn.push('\n    "jquery": "' + jQLib + '"');
-    print(depn.join(','));
-  %>
-  }
+    "name": "<%= _.slugify(projectName)%>",
+    "version": "<%= version%>",
+    "dependencies": {
+        "jquery": "<%= jQLib%>"
+    }
 }

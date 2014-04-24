@@ -78,8 +78,8 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'dev/css',
-                    src: ['*.sprite.css'],
-                    dest: 'dev/css',
+                    src: ['**.css'],
+                    dest: 'dist/css',
                     ext: '.css'
                 }]
             }
@@ -118,7 +118,7 @@ module.exports = function(grunt) {
                     // 導出css和sprite的路徑地址
                     dest: 'dev/css/',
                     // 導出的css名
-                    ext: '.sprite.css'
+                    ext: '.css'
                 }]
             }
         },
@@ -165,13 +165,13 @@ module.exports = function(grunt) {
                     iebug: false // 為 IE6 優化圖片，如需要可設置`true`
                 },
                 files: [{
-                    src: ['dev/sprite/*.png'],
-                    dest: 'dev/sprite/'
+                    src: ['dev/images/*.png'],
+                    dest: 'dist/images/'
                 }, {
                     expand: true,
                     cwd: 'dev/images',
                     src: ['**/*.png'],
-                    dest: 'dev/images',
+                    dest: 'dist/images',
                     ext: '.png'
                 }]
             }
@@ -204,14 +204,9 @@ module.exports = function(grunt) {
             dev: {
                 files: [{
                     expand: true,
-                    cwd: 'tmp/css/',
-                    src: ['**', '!*.timestamp.css', '!*.sprite.css', '!*.min.css'],
+                    cwd: 'source/css/',
+                    src: ['**.css', '!*.timestamp.css', '!*.sprite.css', '!*.min.css'],
                     dest: 'dev/css/'
-                }, {
-                    expand: true,
-                    cwd: 'source/slice/',
-                    src: ['**'],
-                    dest: 'dev/slice/'
                 }, {
                     expand: true,
                     cwd: 'source/images/',
@@ -235,28 +230,8 @@ module.exports = function(grunt) {
                 }, {
                     expand: true,
                     cwd: 'dev/slice/',
-                    src: ['**'],
+                    src: ['**.png'],
                     dest: 'dist/slice/'
-                }]
-            },
-
-            // copy 分支 -> 調試向
-            debug: {
-                files: [{
-                    expand: true,
-                    cwd: 'tmp/css/',
-                    src: ['*.css', '!*.timestamp.css', '!*.sprite.css', '!*.min.css'],
-                    dest: 'publish/css/'
-                }, {
-                    expand: true,
-                    cwd: 'img/',
-                    src: ['**'],
-                    dest: 'publish/img/'
-                }, {
-                    expand: true,
-                    cwd: 'tmp/sprite/',
-                    src: ['**'],
-                    dest: 'publish/sprite/'
                 }]
             }
         },
@@ -264,7 +239,7 @@ module.exports = function(grunt) {
         // 檢測 文件/代碼 變動事件
         watch: {
             files: 'source/css/*.less',
-            tasks: ['less:dev', 'copy:dev', 'clean:dev']
+            tasks: ['clean:dev', 'less:dev', 'copy:dev']
         },
 
 
@@ -283,11 +258,9 @@ module.exports = function(grunt) {
         // 清理臨時目錄
         clean: {
             // clean 開發向
-            dev: ['tmp/', 'dev/slice/', 'dist/'],
+            dev: ['tmp/', 'dev/', 'dist/'],
             // clean 發佈向
-            release: ['tmp/', 'dev/', 'dist/'],
-            // clean 調試向
-            debug: ['tmp/', 'dev/slice/']
+            release: ['tmp/', 'dist/']
         },
 
         // 文件夾打包壓縮 Zip
@@ -353,7 +326,7 @@ module.exports = function(grunt) {
     // == 調試工作流 ==
     // 輸出目錄為：../dev/(css/ + images/ + sprite/)
     // 注：同`grunt all`，但不刪除tmp/ 目錄，供調試查看使用，含(文件變動watch)
-    grunt.registerTask('debug', ['clean:release', 'less:release', 'sprite-cssmin', 'copy:debug', 'watch']);
+    grunt.registerTask('debug', ['clean:dev', 'less:dev', 'sprite-cssmin', 'copy:dev', 'watch']);
 
     // == ZIP 發布操作 ==
     // 注：將`grunt all` 生成結果使用ZIP 生成包文件
