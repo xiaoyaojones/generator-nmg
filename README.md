@@ -46,9 +46,9 @@ Directory
 		├── .editorconfig
 		├── .jshintrc
 		├── bower.json
-		├── Gruntfile.js                        grunt task
+		├── Gruntfile.js                    grunt task
 		├── package.json
-		└── Seaconfig.js                        seajs配置
+		└── Seaconfig.js                    seajs配置
 
 License
 -----------------------------
