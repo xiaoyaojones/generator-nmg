@@ -1,14 +1,36 @@
 generator-nmg
 =============================
-Yeoman generator for NMG@gz - lets you quickly set up a project with sensible defaults and best practises.
+[Yeoman](http://yeoman.io) generator for [NMG](http://www.nmg.com.hk/)@gz - lets you quickly set up a project with sensible defaults and best practises.
 
-Features
+[![NPM](https://nodei.co/npm/generator-nmg.png?compact=true)](https://nodei.co/npm/generator-nmg/)
+
+Yo nmg!
 -----------------------------
-* Automagically compile Less<br />
-* Automagically bilud seajs<br />
-* Automagically lint your scripts<br />
-* Automagically wire up your Bower components with bower-install
+* Automagically wire up your [Bower](http://bower.io/) components with bower-install
+* Automagically compile [Less](http://lesscss.org/)
+* Automagically bilud [SeaJS](http://seajs.org/docs/)
+* Automagically generate css sprites
+* Automagically generate 2x images
+* Automagically compress PNG images
+* Automagically lint your scripts
 
+Getting Started
+-----------------------------
+```
+$ npm install -g yo
+```
+
+To install generator-nmg from npm, run:
+
+```
+$ npm install -g generator-nmg
+```
+
+Finally, initiate the generator:
+
+```
+$ yo nmg
+```
 
 Directory
 -----------------------------
@@ -16,19 +38,19 @@ Directory
 	template
 		├── bower_components                bower組件
 		│   └── jquery                      拉取jquery
-		│   	└── dist							
+		│       └── dist							
 		├── html                            存放靜態HTML
 		├── lib                             js框架、庫
 		│   ├── jquery                          jquery，從bower目錄copy
-		│   │	└── <version>
+		│   │   └── <version>
 		│   └── seajs                           seajs
-		│   	└── <version> 							
+		│       └── <version> 							
 		├── source                          源碼目錄
 		│   ├── css                             less源碼
 		│   ├── images                          不需要sprites的圖片
 		│   ├── js                              js源碼
-		│   │	├──module                           seajs module
-		│   │	└──app                              seajs app
+		│   │   ├──module                           seajs module
+		│   │   └──app                              seajs app
 		│   └── slice                           需要sprites的圖片與css
 		├── tmp                             sprites臨時目錄
 		│   ├── css                             sprites css
